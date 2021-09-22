@@ -125,12 +125,12 @@ const AulasSemana = ({ aulas, diaSemana }) => {
 
   return (
     <div>
-      <p className="my-12 text-3xl">Aulas de {dia[diaSemana]}</p>
+      <p className="my-12 text-5xl text-blue-400">Aulas de {dia[diaSemana]}</p>
       <div
-        className="border-4 border-white m-12 rounded-lg"
+        className="border-8 border-blue-200 m-12 rounded-lg"
         style={{ textAlignLast: "center" }}
       >
-        <table>
+        <table style={{ backgroundColor: "steelblue" }}>
           <thead>
             <tr>
               <th>Curso</th>
