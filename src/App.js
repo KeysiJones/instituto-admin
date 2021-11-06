@@ -96,6 +96,7 @@ function App() {
 
 const AulasSemana = ({ aulas, diaSemana }) => {
   const [value, setValue] = useState({});
+  const [inserting, setInserting] = useState(false);
   const [editableRow, setEditableRow] = useState(0);
   const [edit, setEdit] = useState(false);
 
@@ -104,6 +105,10 @@ const AulasSemana = ({ aulas, diaSemana }) => {
       ...prevState,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleInsertion = () => {
+    setInserting(!inserting);
   };
 
   useEffect(() => {
@@ -115,7 +120,7 @@ const AulasSemana = ({ aulas, diaSemana }) => {
     });
 
     setValue(cursoArray);
-  }, [aulas]);
+  }, [aulas, diaSemana]);
   const dia = {
     terca: "terça",
     quarta: "quarta",
@@ -126,8 +131,14 @@ const AulasSemana = ({ aulas, diaSemana }) => {
   return (
     <div>
       <p className="my-12 text-5xl text-blue-400">Aulas de {dia[diaSemana]}</p>
+      <button
+        onClick={() => handleInsertion()}
+        className="bg-blue-200 p-2 text-gray-700 rounded-t-xl"
+      >
+        Adicionar nova aula de {dia[diaSemana]}
+      </button>
       <div
-        className="border-8 border-blue-200 m-12 rounded-lg"
+        className="border-8 border-blue-200 mx-12 mb-12 rounded-lg"
         style={{ textAlignLast: "center" }}
       >
         <table style={{ backgroundColor: "steelblue" }}>
@@ -140,6 +151,34 @@ const AulasSemana = ({ aulas, diaSemana }) => {
             </tr>
           </thead>
           <tbody>
+            {inserting ? (
+              <>
+                <td className="p-2">
+                  <input
+                    placeholder="digite o novo nome do curso"
+                    type="text"
+                    onChange={handleChange}
+                    className="text-black rounded-md p-2"
+                  />
+                </td>
+                <td className="p-2">
+                  <input
+                    placeholder="digite o novo horário do curso"
+                    type="text"
+                    onChange={handleChange}
+                    className="text-black rounded-md p-2 w-32"
+                  />
+                </td>
+                <td className="p-2">
+                  <input
+                    placeholder="novo link"
+                    type="text"
+                    onChange={handleChange}
+                    className="text-black rounded-md p-2 w-full"
+                  />
+                </td>
+              </>
+            ) : null}
             {aulas.map((curso) => {
               return (
                 <tr key={curso.id}>
