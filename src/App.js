@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 const BASE_URL = "https://backend-instituto.herokuapp.com";
 // const BASE_URL = "http://192.168.0.13:3001";
 const AULAS_URL = `${BASE_URL}/aulas/6128177affc6504f682dbb81`;
+const ADICIONAR_AULAS_URL = `${BASE_URL}/novasAulas/6128177affc6504f682dbb81`;
 const LOGIN_URL = `${BASE_URL}/login`;
 const verifyLogged = (isValid) => {
   let username, password;
@@ -62,6 +63,7 @@ function App() {
   const [aulasQuarta, setAulasQuarta] = useState([]);
   const [aulasQuinta, setAulasQuinta] = useState([]);
   const [aulasSabado, setAulasSabado] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     verifyLogged(true);
@@ -74,17 +76,33 @@ function App() {
         setAulasQuinta(cursos.quinta);
         setAulasSabado(cursos.sabado);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="App">
       <header className="App-header">
         {aulasTerca[0] ? (
           <div>
-            <AulasSemana aulas={aulasTerca} diaSemana="terca" />
-            <AulasSemana aulas={aulasQuarta} diaSemana="quarta" />
-            <AulasSemana aulas={aulasQuinta} diaSemana="quinta" />
-            <AulasSemana aulas={aulasSabado} diaSemana="sabado" />
+            <AulasSemana
+              aulas={aulasTerca}
+              diaSemana="terca"
+              setRefresh={setRefresh}
+            />
+            <AulasSemana
+              aulas={aulasQuarta}
+              diaSemana="quarta"
+              setRefresh={setRefresh}
+            />
+            <AulasSemana
+              aulas={aulasQuinta}
+              diaSemana="quinta"
+              setRefresh={setRefresh}
+            />
+            <AulasSemana
+              aulas={aulasSabado}
+              diaSemana="sabado"
+              setRefresh={setRefresh}
+            />
           </div>
         ) : (
           "Carregando cursos..."
@@ -94,7 +112,7 @@ function App() {
   );
 }
 
-const AulasSemana = ({ aulas, diaSemana }) => {
+const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
   const [value, setValue] = useState({});
   const [inserting, setInserting] = useState(false);
   const [editableRow, setEditableRow] = useState(0);
@@ -133,7 +151,7 @@ const AulasSemana = ({ aulas, diaSemana }) => {
       <p className="my-12 text-5xl text-blue-400">Aulas de {dia[diaSemana]}</p>
       <button
         onClick={() => handleInsertion()}
-        className="bg-blue-200 p-2 text-gray-700 rounded-t-xl"
+        className="bg-blue-200 p-2 text-gray-700 rounded-t-xl outline-none"
       >
         Adicionar nova aula de {dia[diaSemana]}
       </button>
@@ -152,10 +170,11 @@ const AulasSemana = ({ aulas, diaSemana }) => {
           </thead>
           <tbody>
             {inserting ? (
-              <>
+              <tr>
                 <td className="p-2">
                   <input
-                    placeholder="digite o novo nome do curso"
+                    name="nome-novo-curso"
+                    placeholder="Ex: Doutrina e Convênios"
                     type="text"
                     onChange={handleChange}
                     className="text-black rounded-md p-2"
@@ -163,7 +182,8 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                 </td>
                 <td className="p-2">
                   <input
-                    placeholder="digite o novo horário do curso"
+                    name="horario-novo-curso"
+                    placeholder="Ex: 09h30"
                     type="text"
                     onChange={handleChange}
                     className="text-black rounded-md p-2 w-32"
@@ -171,13 +191,67 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                 </td>
                 <td className="p-2">
                   <input
-                    placeholder="novo link"
+                    name="link-novo-curso"
+                    placeholder="Ex: https://zoom.us/j/95927244033?"
                     type="text"
                     onChange={handleChange}
                     className="text-black rounded-md p-2 w-full"
                   />
                 </td>
-              </>
+                <td className="p-2">
+                  <button
+                    onClick={(e) => {
+                      if (
+                        // eslint-disable-next-line no-restricted-globals
+                        confirm("Deseja salvar as alterações realizadas ?")
+                      ) {
+                        setRefresh((prevState) => !prevState);
+                        setInserting(!inserting);
+                        let payload = {
+                          diaSemana: diaSemana,
+                          novaAula: {
+                            link: value["link-novo-curso"],
+                            nome: value["nome-novo-curso"],
+                            horario: value["horario-novo-curso"],
+                          },
+                        };
+
+                        const authToken =
+                          localStorage.getItem("authToken") || "";
+                        fetch(ADICIONAR_AULAS_URL, {
+                          headers: {
+                            "Content-Type": "application/json",
+                            "x-access-token": authToken,
+                          },
+                          method: "PUT",
+                          body: JSON.stringify(payload),
+                        })
+                          .then((res) => {
+                            if (res.status === 403 || res.status === 401) {
+                              alert(
+                                "Você precisa estar logado para editar registros, por favor digite o seu usuário e senha."
+                              );
+                              verifyLogged(false);
+                            }
+                            if (res.status === 200) {
+                              alert("Aula cadastrada com sucesso");
+                            }
+                          })
+                          .then((res) => {
+                            if (res.ok === 1) {
+                              alert("Aula cadastrada com sucesso");
+                            }
+                            alert("Erro ao cadastrar aula");
+                          })
+                          .catch((err) => console.log(err));
+                      }
+                    }}
+                    className="p-4 bg-blue-400 rounded-2xl m-2"
+                  >
+                    Salvar
+                  </button>
+                </td>
+              </tr>
             ) : null}
             {aulas.map((curso) => {
               return (
