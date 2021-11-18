@@ -76,7 +76,7 @@ function App() {
         setAulasQuinta(cursos.quinta);
         setAulasSabado(cursos.sabado);
       });
-  }, [refresh]);
+  }, [refresh, setRefresh]);
 
   return (
     <div className="App">
