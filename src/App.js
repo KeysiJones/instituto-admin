@@ -147,7 +147,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
   };
 
   return (
-    <div>
+    <div id={diaSemana}>
       <p className="my-12 text-5xl text-blue-400">Aulas de {dia[diaSemana]}</p>
       <button
         onClick={() => handleInsertion()}
@@ -161,11 +161,12 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
       >
         <table style={{ backgroundColor: "steelblue" }} className="w-full">
           <thead>
-            <tr>
+            <tr style={{ backgroundColor: "#1487ff" }}>
               <th>Curso</th>
               <th>Horário</th>
               <th>Link</th>
               <th>Ações</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -173,29 +174,32 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
               <tr>
                 <td className="p-2">
                   <input
+                    autocomplete="off"
                     name="nome-novo-curso"
                     placeholder="Ex: Doutrina e Convênios"
                     type="text"
                     onChange={handleChange}
-                    className="text-black rounded-md p-2"
+                    className="text-black rounded-md p-2 outline-none"
                   />
                 </td>
                 <td className="p-2">
                   <input
+                    autocomplete="off"
                     name="horario-novo-curso"
                     placeholder="Ex: 09h30"
                     type="text"
                     onChange={handleChange}
-                    className="text-black rounded-md p-2 w-32"
+                    className="text-black rounded-md p-2 w-32 outline-none"
                   />
                 </td>
                 <td className="p-2">
                   <input
+                    autocomplete="off"
                     name="link-novo-curso"
                     placeholder="Ex: https://zoom.us/j/95927244033?"
                     type="text"
                     onChange={handleChange}
-                    className="text-black rounded-md p-2 w-full"
+                    className="text-black rounded-md p-2 w-full outline-none"
                   />
                 </td>
                 <td className="p-2">
@@ -234,7 +238,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                             }
                             if (res.status === 200) {
                               alert("Aula cadastrada com sucesso");
-                              window.location.reload();
+                              setRefresh((prevState) => !prevState);
                             }
                           })
                           .then((res) => {
@@ -246,9 +250,17 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                           .catch((err) => console.log(err));
                       }
                     }}
-                    className="p-4 bg-blue-400 rounded-2xl m-2"
+                    className="p-4 bg-blue-400 rounded-2xl m-2 font-bold"
                   >
                     Salvar
+                  </button>
+                </td>
+                <td className="p-2">
+                  <button
+                    onClick={() => setInserting(false)}
+                    className="p-4 bg-red-400 rounded-2xl m-2 font-bold"
+                  >
+                    Cancelar
                   </button>
                 </td>
               </tr>
@@ -259,12 +271,13 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                   <td id={`${diaSemana}-${curso.id}`} className="p-2">
                     {editableRow === `${diaSemana}-${curso.id}` && edit ? (
                       <input
+                        autocomplete="off"
                         placeholder="digite o novo nome do curso"
                         name={`${diaSemana}-nome-${curso.id}`}
                         type="text"
                         onChange={handleChange}
                         value={value[`${diaSemana}-nome-${curso.id}`]}
-                        className="text-black rounded-md p-2"
+                        className="text-black rounded-md p-2 outline-none"
                       />
                     ) : (
                       <p>
@@ -275,13 +288,14 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                   <td id={`horario-${diaSemana}-${curso.id}`} className="p-2">
                     {editableRow === `${diaSemana}-${curso.id}` && edit ? (
                       <input
+                        autocomplete="off"
                         id={`input-${diaSemana}-${curso.id}`}
                         placeholder="digite o novo horário do curso"
                         name={`${diaSemana}-horario-${curso.id}`}
                         type="text"
                         onChange={handleChange}
                         value={value[`${diaSemana}-horario-${curso.id}`] ?? ""}
-                        className="text-black rounded-md p-2 w-32"
+                        className="text-black rounded-md p-2 w-32 outline-none"
                       />
                     ) : (
                       <p>
@@ -293,12 +307,13 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                   <td id={`link-${diaSemana}-${curso.id}`} className="p-2">
                     {editableRow === `${diaSemana}-${curso.id}` && edit ? (
                       <input
+                        autocomplete="off"
                         placeholder="novo link"
                         name={`${diaSemana}-link-${curso.id}`}
                         type="text"
                         onChange={handleChange}
                         value={value[`${diaSemana}-link-${curso.id}`] ?? ""}
-                        className="text-black rounded-md p-2 w-full"
+                        className="text-black rounded-md p-2 w-full outline-none"
                       />
                     ) : (
                       <a
@@ -364,11 +379,12 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                                 alert("Erro ao atualizar registro");
                               })
                               .catch((err) => console.log(err));
+                          } else {
+                            setRefresh((prevState) => !prevState);
                           }
-                          setRefresh((prevState) => !prevState);
                         }
                       }}
-                      className="p-4 bg-blue-400 rounded-2xl m-2"
+                      className="p-4 bg-blue-400 rounded-2xl m-2 font-bold"
                     >
                       {edit && editableRow === `${diaSemana}-${curso.id}`
                         ? "Salvar"
@@ -410,7 +426,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
 
                               if (res.status === 200) {
                                 alert("Registro deletado com sucesso");
-                                window.location.reload();
+                                setRefresh((prevState) => !prevState);
                               }
                             })
                             .then((res) => {
@@ -422,7 +438,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                             .catch((err) => console.log(err));
                         }
                       }}
-                      className="p-4 bg-red-500 rounded-2xl m-2"
+                      className="p-4 bg-red-400 rounded-2xl m-2 font-bold"
                     >
                       Deletar
                     </button>
