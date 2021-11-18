@@ -63,7 +63,7 @@ function App() {
   const [aulasQuarta, setAulasQuarta] = useState([]);
   const [aulasQuinta, setAulasQuinta] = useState([]);
   const [aulasSabado, setAulasSabado] = useState([]);
-  // const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     verifyLogged(true);
@@ -76,7 +76,7 @@ function App() {
         setAulasQuinta(cursos.quinta);
         setAulasSabado(cursos.sabado);
       });
-  }, []);
+  }, [refresh, setRefresh]);
 
   return (
     <div className="App">
@@ -86,22 +86,22 @@ function App() {
             <AulasSemana
               aulas={aulasTerca}
               diaSemana="terca"
-              // setRefresh={setRefresh}
+              setRefresh={setRefresh}
             />
             <AulasSemana
               aulas={aulasQuarta}
               diaSemana="quarta"
-              // setRefresh={setRefresh}
+              setRefresh={setRefresh}
             />
             <AulasSemana
               aulas={aulasQuinta}
               diaSemana="quinta"
-              // setRefresh={setRefresh}
+              setRefresh={setRefresh}
             />
             <AulasSemana
               aulas={aulasSabado}
               diaSemana="sabado"
-              // setRefresh={setRefresh}
+              setRefresh={setRefresh}
             />
           </div>
         ) : (
@@ -112,7 +112,7 @@ function App() {
   );
 }
 
-const AulasSemana = ({ aulas, diaSemana }) => {
+const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
   const [value, setValue] = useState({});
   const [inserting, setInserting] = useState(false);
   const [editableRow, setEditableRow] = useState(0);
@@ -245,7 +245,6 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                           })
                           .catch((err) => console.log(err));
                       }
-                      // setRefresh((prevState) => !prevState);
                     }}
                     className="p-4 bg-blue-400 rounded-2xl m-2"
                   >
@@ -361,13 +360,12 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                               .then((res) => {
                                 if (res.ok === 1) {
                                   alert("Registro atualizado com sucesso");
-                                  window.location.reload();
                                 }
                                 alert("Erro ao atualizar registro");
                               })
                               .catch((err) => console.log(err));
                           }
-                          // setRefresh((prevState) => !prevState);
+                          setRefresh((prevState) => !prevState);
                         }
                       }}
                       className="p-4 bg-blue-400 rounded-2xl m-2"
@@ -423,7 +421,6 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                             })
                             .catch((err) => console.log(err));
                         }
-                        // setRefresh((prevState) => !prevState);
                       }}
                       className="p-4 bg-red-500 rounded-2xl m-2"
                     >
