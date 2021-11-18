@@ -17,5 +17,9 @@ code {
 }
 
 tr:nth-child(even) {
-  background-color: #1487ff;
+  background-color: dodgerblue;
+}
+
+tr:nth-child(odd) {
+  @apply bg-blue-400;
 }

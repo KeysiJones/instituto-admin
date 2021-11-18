@@ -151,17 +151,17 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
       <p className="my-12 text-5xl text-blue-400">Aulas de {dia[diaSemana]}</p>
       <button
         onClick={() => handleInsertion()}
-        className="bg-blue-200 p-2 text-gray-700 rounded-t-xl outline-none"
+        className="bg-blue-500 p-2 text-white rounded-t-xl outline-none font-bold"
       >
-        Adicionar nova aula de {dia[diaSemana]}
+        Cadastrar nova aula de {dia[diaSemana]}
       </button>
       <div
-        className="border-8 border-blue-200 mx-12 mb-12 rounded-lg"
+        className="border-t-8 border-blue-500 mx-12 mb-12 rounded-lg"
         style={{ textAlignLast: "center" }}
       >
-        <table style={{ backgroundColor: "steelblue" }} className="w-full">
+        <table className="w-full">
           <thead>
-            <tr style={{ backgroundColor: "#1487ff" }}>
+            <tr style={{ backgroundColor: "dodgerblue" }}>
               <th>Curso</th>
               <th>Horário</th>
               <th>Link</th>
@@ -250,7 +250,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                           .catch((err) => console.log(err));
                       }
                     }}
-                    className="p-4 bg-blue-400 rounded-2xl m-2 font-bold"
+                    className="p-4 bg-blue-500 rounded-2xl m-2 font-bold"
                   >
                     Salvar
                   </button>
@@ -384,7 +384,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                           }
                         }
                       }}
-                      className="p-4 bg-blue-400 rounded-2xl m-2 font-bold"
+                      className="p-4 bg-blue-500 rounded-2xl m-2 font-bold"
                     >
                       {edit && editableRow === `${diaSemana}-${curso.id}`
                         ? "Salvar"
