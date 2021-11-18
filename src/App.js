@@ -223,7 +223,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                             "Content-Type": "application/json",
                             "x-access-token": authToken,
                           },
-                          method: "PUT",
+                          method: "POST",
                           body: JSON.stringify(payload),
                         })
                           .then((res) => {
