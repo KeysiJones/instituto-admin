@@ -234,12 +234,12 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                             }
                             if (res.status === 200) {
                               alert("Aula cadastrada com sucesso");
+                              window.location.reload();
                             }
                           })
                           .then((res) => {
                             if (res.ok === 1) {
                               alert("Aula cadastrada com sucesso");
-                              window.location.reload();
                             }
                             alert("Erro ao cadastrar aula");
                           })
@@ -410,12 +410,12 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
 
                               if (res.status === 200) {
                                 alert("Registro deletado com sucesso");
+                                window.location.reload();
                               }
                             })
                             .then((res) => {
                               if (res.ok === 1) {
                                 alert("Registro deletado com sucesso");
-                                window.location.reload();
                               }
                               alert("Erro ao atualizar registro");
                             })
