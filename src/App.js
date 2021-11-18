@@ -159,7 +159,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
         className="border-8 border-blue-200 mx-12 mb-12 rounded-lg"
         style={{ textAlignLast: "center" }}
       >
-        <table style={{ backgroundColor: "steelblue" }}>
+        <table style={{ backgroundColor: "steelblue" }} className="w-full">
           <thead>
             <tr>
               <th>Curso</th>
@@ -205,7 +205,6 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                         // eslint-disable-next-line no-restricted-globals
                         confirm("Deseja salvar as alterações realizadas ?")
                       ) {
-                        setRefresh((prevState) => !prevState);
                         setInserting(!inserting);
                         let payload = {
                           diaSemana: diaSemana,
@@ -229,7 +228,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                           .then((res) => {
                             if (res.status === 403 || res.status === 401) {
                               alert(
-                                "Você precisa estar logado para editar registros, por favor digite o seu usuário e senha."
+                                "Você precisa estar logado para cadastrar novos cursos, por favor digite o seu usuário e senha."
                               );
                               verifyLogged(false);
                             }
@@ -245,6 +244,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                           })
                           .catch((err) => console.log(err));
                       }
+                      setRefresh((prevState) => !prevState);
                     }}
                     className="p-4 bg-blue-400 rounded-2xl m-2"
                   >
@@ -302,11 +302,12 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                       />
                     ) : (
                       <a
+                        className="underline"
                         href={
                           value[`${diaSemana}-link-${curso.id}`] ?? curso.link
                         }
                       >
-                        {value[`${diaSemana}-link-${curso.id}`] ?? curso.link}
+                        Assistir aula
                       </a>
                     )}
                   </td>
@@ -364,6 +365,7 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                               })
                               .catch((err) => console.log(err));
                           }
+                          setRefresh((prevState) => !prevState);
                         }
                       }}
                       className="p-4 bg-blue-400 rounded-2xl m-2"
@@ -371,6 +373,58 @@ const AulasSemana = ({ aulas, diaSemana, setRefresh }) => {
                       {edit && editableRow === `${diaSemana}-${curso.id}`
                         ? "Salvar"
                         : "Editar"}
+                    </button>
+                  </td>
+                  <td className="p-2">
+                    <button
+                      onClick={() => {
+                        if (
+                          // eslint-disable-next-line no-restricted-globals
+                          confirm(
+                            `Tem certeza que deseja deletar o curso ${curso.nome} ?`
+                          )
+                        ) {
+                          let updatedData = {
+                            diaSemana: diaSemana,
+                            aula: { id: curso.id },
+                          };
+
+                          const authToken =
+                            localStorage.getItem("authToken") || "";
+
+                          fetch(ADICIONAR_AULAS_URL, {
+                            headers: {
+                              "Content-Type": "application/json",
+                              "x-access-token": authToken,
+                            },
+                            method: "DELETE",
+                            body: JSON.stringify(updatedData),
+                          })
+                            .then((res) => {
+                              if (res.status === 403 || res.status === 401) {
+                                alert(
+                                  "Você precisa estar logado para deletar cursos, por favor digite o seu usuário e senha."
+                                );
+                                verifyLogged(false);
+                              }
+
+                              if (res.status === 200) {
+                                alert("Registro deletado com sucesso");
+                              }
+                            })
+                            .then((res) => {
+                              if (res.ok === 1) {
+                                alert("Registro deletado com sucesso");
+                              }
+                              alert("Erro ao atualizar registro");
+                            })
+                            .catch((err) => console.log(err));
+                        }
+                        setRefresh((prevState) => !prevState);
+                      }}
+                      className="p-4 bg-red-500 rounded-2xl m-2"
+                    >
+                      Deletar
                     </button>
                   </td>
                 </tr>
