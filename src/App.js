@@ -239,12 +239,12 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                           .then((res) => {
                             if (res.ok === 1) {
                               alert("Aula cadastrada com sucesso");
+                              window.location.reload();
                             }
                             alert("Erro ao cadastrar aula");
                           })
                           .catch((err) => console.log(err));
                       }
-                      window.location.reload();
                       // setRefresh((prevState) => !prevState);
                     }}
                     className="p-4 bg-blue-400 rounded-2xl m-2"
@@ -361,12 +361,12 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                               .then((res) => {
                                 if (res.ok === 1) {
                                   alert("Registro atualizado com sucesso");
+                                  window.location.reload();
                                 }
                                 alert("Erro ao atualizar registro");
                               })
                               .catch((err) => console.log(err));
                           }
-                          window.location.reload();
                           // setRefresh((prevState) => !prevState);
                         }
                       }}
@@ -417,12 +417,12 @@ const AulasSemana = ({ aulas, diaSemana }) => {
                             .then((res) => {
                               if (res.ok === 1) {
                                 alert("Registro deletado com sucesso");
+                                window.location.reload();
                               }
                               alert("Erro ao atualizar registro");
                             })
                             .catch((err) => console.log(err));
                         }
-                        window.location.reload();
                         // setRefresh((prevState) => !prevState);
                       }}
                       className="p-4 bg-red-500 rounded-2xl m-2"
